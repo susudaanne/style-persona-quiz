@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CHARLES & KEITH Style Identity Quiz</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #fff8f2;
+      margin: 0;
+      padding: 2em;
+      color: #333;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 2em;
+    }
+    h1, h2 {
+      color: #c89b7b;
+    }
+    label {
+      display: block;
+      margin-bottom: 1em;
+      font-size: 1.1em;
+    }
+    button {
+      background-color: #c89b7b;
+      color: white;
+      border: none;
+      padding: 0.7em 1.5em;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    button:hover {
+      background-color: #a87c60;
+    }
+    #result {
+      margin-top: 2em;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>What’s Your Style Identity?</h1>
+    <div id="quiz"></div>
+    <button id="next">Next</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "The morning sun peeks through your window. What are you reaching for?",
+        answers: {
+          A: "A breezy dress, dainty flats and a good coffee vibe",
+          B: "Sleek shirt, trousers, and a bag that means business",
+          C: "A wild combo — oversized blazer, metallic boots, bold energy",
+          D: "Comfy co-ords, big sunnies, maybe a passport",
+          E: "All black everything — maybe with silver hardware"
+        }
+      },
+      {
+        question: "You're heading to a secret style pop-up. What's in your bag?",
+        answers: {
+          A: "Lip balm, a pressed flower, a folded love note",
+          B: "A planner, headphones, and a lint roller",
+          C: "A digital camera and a mini disco ball (just in case)",
+          D: "Snacks, SPF, and flight itineraries",
+          E: "Your sketchbook and 3 rings you might layer later"
+        }
+      }
+      // Add more questions here following the same structure
+    ];
+
+    const scores = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+    let currentQuestion = 0;
+
+    const quizEl = document.getElementById("quiz");
+    const nextBtn = document.getElementById("next");
+    const resultEl = document.getElementById("result");
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      quizEl.innerHTML = `<h2>${q.question}</h2>`;
+      for (const [key, value] of Object.entries(q.answers)) {
+        quizEl.innerHTML += `<label><input type="radio" name="answer" value="${key}"/> ${value}</label>`;
+      }
+    }
+
+    function getResult() {
+      const maxScore = Math.max(...Object.values(scores));
+      const top = Object.entries(scores).find(([_, v]) => v === maxScore)[0];
+      const resultMap = {
+        A: "The Dreamy Pragmatist 🌷",
+        B: "The Power Planner 💼",
+        C: "The Avant-Garde Dreamer ✨",
+        D: "The Capsule Curator 🌍",
+        E: "The Soft Rebel 🎨"
+      };
+      return resultMap[top];
+    }
+
+    nextBtn.addEventListener("click", () => {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) return alert("Pick one!");
+      scores[selected.value]++;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        quizEl.style.display = "none";
+        nextBtn.style.display = "none";
+        resultEl.innerHTML = `<h2>You are: ${getResult()}</h2>`;
+      }
+    });
+
+    showQuestion();
+  </script>
+</body>
+</html>
